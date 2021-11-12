@@ -1,0 +1,57 @@
+@import './variables';
+@import '~bootstrap/scss/bootstrap';
+// @import "./bs.scss";
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// quiz
+$green-2:#1E8F73;
+.card-ticket {
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  height: 2.75rem;
+  width: 2.75rem;
+  color: $green-2;
+  background-color: rgba($color: $green-2, $alpha: 0.1);
+  border: none;
+  margin-bottom: 0.5rem;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  @media screen and (min-width:767px) {
+    height: 3.75rem;
+    width: 3.75rem;
+  }
+  &:hover, &.selected{
+    background-color: rgba($color: $green-2, $alpha: 0.9);
+    color: $white;
+    a{
+      color: inherit !important;
+    }
+  }
+}
+
+.main-quiz-home{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+.quiz-question{
+  font-size: 1.25rem;
+}
