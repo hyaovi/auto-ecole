@@ -1,6 +1,7 @@
 @import './variables';
 @import '~bootstrap/scss/bootstrap';
 // @import "./bs.scss";
+@import './animation.scss';
 html,
 body {
   padding: 0;
@@ -30,31 +31,32 @@ a {
   align-items: center;
   border-radius: 0.5rem;
   font-weight: 500;
-  @media screen and (min-width:767px) {
+  @media screen and (min-width: 767px) {
     height: 3.75rem;
     width: 3.75rem;
   }
-  &:hover, &.selected{
+  &:hover,
+  &.selected {
     background-color: rgba($color: $green-2, $alpha: 0.9);
     color: $white;
-    a{
+    a {
       color: inherit !important;
     }
   }
 }
 
-.main-quiz-home{
+.main-quiz-home {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow-y: auto;
 }
-.quiz-question{
+.quiz-question {
   font-size: 1.25rem;
 }
 
-.quiz-option{
+.quiz-option {
   font-size: 1rem;
   cursor: pointer;
   background-color: rgba($color: $dark, $alpha: 0.1);
@@ -63,25 +65,46 @@ a {
   padding: 0.5rem;
   display: flex;
   align-items: flex-start;
-  &:not(:last-child){
+  &:not(:last-child) {
     margin-bottom: 1rem;
   }
-  .quiz-option-number{
+  .quiz-option-number {
     font-size: 0.75rem;
     padding: 0.25rem;
     border-radius: 0.25rem;
     background-color: $white;
     margin-right: 0.5rem;
   }
-  &:hover{
+  &:hover {
     background-color: rgba($color: $dark, $alpha: 0.2);
   }
-  &.selected{
+  &.selected {
     background-color: rgba($color: $green-2, $alpha: 0.99);
     color: $white;
-    .quiz-option-number{
+    .quiz-option-number {
       color: $dark;
     }
   }
+}
 
+.quiz-results {
+  &.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1px;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .percentage{
+    height: 150px;
+    width: 150px;
+    border-radius: 50rem;
+    border: 0.25rem solid $primary;
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.375rem;
+    font-weight: 500;
+  }
 }

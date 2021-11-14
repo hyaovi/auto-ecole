@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Img from '../common/Img';
+import Results from './Results';
 
 const initialStats = {
   totalAnswered: 0,
@@ -14,10 +15,15 @@ const initialQuestionState = {
 };
 
 function Display({ questionList = [] }) {
+  // XXX remove or change animation logics
+  const htmlEl = useRef(null);
+  const parentEl = useRef(null);
   const [showResults, setShowResults] = useState(false);
   const [userLogs, setUserLogs] = useState([]);
   const [stats, setStats] = useState(initialStats);
   const [currentQuestion, setCurrentQuestion] = useState(initialQuestionState);
+
+  const logsLength = useMemo(() => () => userLogs.length, [userLogs]);
 
   useEffect(() => {
     // reset quiz
@@ -45,7 +51,19 @@ function Display({ questionList = [] }) {
     };
     resetQuiz();
   }, [questionList]);
-
+  useEffect(() => {
+    const el = htmlEl.current;
+    const elWrapper = parentEl.current;
+    console.log(el);
+    if (el) {
+      el.classList.add('slide-up');
+      elWrapper.classList.add('slide-up-wrapper');
+      setTimeout(() => {
+        el.classList.remove('slide-up');
+        elWrapper.classList.remove('slide-up-wrapper');
+      }, 500);
+    }
+  }, [logsLength]);
   useEffect(() => {
     setCurrentQuestion((PREV_STATE) => ({
       ...PREV_STATE,
@@ -111,12 +129,18 @@ function Display({ questionList = [] }) {
     <>
       {showResults ? (
         <>
-          <p>{`${(stats.correctAnswers / questionList.length) * 100}%`}</p>
+          <Results
+            results={{
+              percentage: (stats.correctAnswers / questionList.length) * 100,
+            }}
+          />
         </>
       ) : (
         currentQuestion.id && (
-          <div className='row'>
-            <div className='col-12 col-md-10 col-lg-7 col-xl-6'>
+          <div className='row ' ref={parentEl}>
+            <div
+              className='col-12 col-md-10 col-lg-7 col-xl-6 slide-up'
+              ref={htmlEl}>
               <div className='d-flex flex-nowrap'>
                 <small className='pr-2 small text-nowrap'>
                   {`${currentQuestion.index + 1} ->  `}{' '}
