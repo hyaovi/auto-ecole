@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useDocumentVisibility } from '../../hook/useDocumentVisibility';
+import { useInterval } from '../../hook/useInterval';
 import Img from '../common/Img';
 import Results from './Results';
-
 const initialStats = {
   totalAnswered: 0,
   correctAnswers: 0,
@@ -18,49 +19,73 @@ function Display({ questionList = [] }) {
   // XXX remove or change animation logics
   const htmlEl = useRef(null);
   const parentEl = useRef(null);
+  const [timer, setTimer] = useState(0);
+  const [delay, setDelay] = useState(1000);
   const [showResults, setShowResults] = useState(false);
   const [userLogs, setUserLogs] = useState([]);
   const [stats, setStats] = useState(initialStats);
   const [currentQuestion, setCurrentQuestion] = useState(initialQuestionState);
+  const isDocumentVisible = useDocumentVisibility();
+  const timeOut = 5; // unit : minutes
 
+  useEffect(() => {
+    if (isDocumentVisible) {
+      setDelay(1000);
+    } else {
+      setDelay(null);
+    }
+    return () => {};
+  }, [isDocumentVisible]);
+
+  useInterval(() => {
+    if (timer === timeOut * 60) {
+      // timeout stop quiz and show results
+      if (!showResults) setShowResults(true);
+    } else {
+      setTimer(timer + 1);
+    }
+  }, delay);
   const logsLength = useMemo(() => () => userLogs.length, [userLogs]);
+
+  const resetQuiz = useCallback(() => {
+    if (questionList.length) {
+      // reset timer
+      setTimer(0);
+      // reset stats
+      setStats(initialStats);
+
+      // reset logs
+      setUserLogs([]);
+
+      // hide results
+      setShowResults(false);
+
+      // set first question
+      const firstQuestionIndex = 0;
+      const question = questionList[0];
+
+      setCurrentQuestion((PREV_STATE) => ({
+        ...PREV_STATE,
+        index: firstQuestionIndex,
+        id: question.id,
+      }));
+    }
+  }, [questionList]);
 
   useEffect(() => {
     // reset quiz
-    const resetQuiz = () => {
-      if (questionList.length) {
-        // reset stats
-        setStats(initialStats);
-
-        // reset logs
-        setUserLogs([]);
-
-        // hide results
-        setShowResults(false);
-
-        // set first question
-        const firstQuestionIndex = 0;
-        const question = questionList[0];
-
-        setCurrentQuestion((PREV_STATE) => ({
-          ...PREV_STATE,
-          index: firstQuestionIndex,
-          id: question.id,
-        }));
-      }
-    };
     resetQuiz();
-  }, [questionList]);
+  }, [questionList, resetQuiz]);
   useEffect(() => {
     const el = htmlEl.current;
     const elWrapper = parentEl.current;
-    console.log(el);
     if (el) {
-      el.classList.add('slide-up');
+      console.log(el, elWrapper);
       elWrapper.classList.add('slide-up-wrapper');
+      el.classList.add('slide-up');
       setTimeout(() => {
-        el.classList.remove('slide-up');
         elWrapper.classList.remove('slide-up-wrapper');
+        el.classList.remove('slide-up');
       }, 500);
     }
   }, [logsLength]);
@@ -130,6 +155,7 @@ function Display({ questionList = [] }) {
       {showResults ? (
         <>
           <Results
+            restartQuiz={resetQuiz}
             results={{
               percentage: (stats.correctAnswers / questionList.length) * 100,
             }}
@@ -141,7 +167,7 @@ function Display({ questionList = [] }) {
             <div
               className='col-12 col-md-10 col-lg-7 col-xl-6 slide-up'
               ref={htmlEl}>
-              <div className='d-flex flex-nowrap'>
+              <div className='d-flex flex-nowrap mt-3 mt-lg-5'>
                 <small className='pr-2 small text-nowrap'>
                   {`${currentQuestion.index + 1} ->  `}{' '}
                 </small>
