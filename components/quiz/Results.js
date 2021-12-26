@@ -1,6 +1,11 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 
 function Results({ results, restartQuiz }) {
+  const router = useRouter();
+  const redirectToTickects = () => {
+    router.push('/');
+  };
   return (
     <div className=''>
       <div className='quiz-results wrapper'>
@@ -10,8 +15,11 @@ function Results({ results, restartQuiz }) {
         <p>
           {' '}
           <button onClick={restartQuiz} className='btn btn-outline-primary'>
-            Restart
+            Restart this quiz
           </button>{' '}
+          <button onClick={redirectToTickects} className='btn btn-primary'>
+            Pick another
+          </button>
         </p>
       </div>
     </div>
