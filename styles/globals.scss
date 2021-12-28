@@ -13,6 +13,15 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.full-height{
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+}
+.quiz-bg-light{
+  background-color: #EFF2F5;
+}
 // quiz
 .card-ticket {
   position: relative;
@@ -59,28 +68,38 @@ a {
 .quiz-option {
   font-size: 1rem;
   cursor: pointer;
-  background-color: rgba($color: $dark, $alpha: 0.1);
+  background-color: rgba($color: $white, $alpha: 0.5);
   border-radius: $border-radius;
-  border: thin solid rgba($color: $dark, $alpha: 0.2);
-  padding: 0.5rem;
+  border: thin solid rgba($color: $dark, $alpha: 0.09);
+  padding: 0.65rem;
   display: flex;
   align-items: flex-start;
+  // box-shadow:  0rem 0.2rem 0.3rem rgba($color: $dark, $alpha: 0.075);
+  color: rgba($color: $dark, $alpha: 0.75);
   &:not(:last-child) {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
   .quiz-option-number {
     font-size: 0.75rem;
     padding: 0.25rem;
     border-radius: 0.25rem;
-    background-color: $white;
+    background-color: #EFF2F5;
     margin-right: 0.5rem;
   }
   &:hover {
-    background-color: rgba($color: $dark, $alpha: 0.2);
+    background-color: rgba($color: $white, $alpha: 1);
+    border-color:rgba($color: $dark, $alpha: 0.09);
+    // box-shadow:  0rem 0.1rem 0.2rem rgba($color: $dark, $alpha: 0.0875);
+    color: $dark;
+
   }
   &.selected {
-    background-color: rgba($color: $green-2, $alpha: 0.99);
-    color: $white;
+    // font-weight: 500;
+    background-color: rgba($color: $white, $alpha: 1);
+    border-color:rgba($color: $dark, $alpha: 0.5);
+    box-shadow:  0rem 0.3rem 0.6rem rgba($color: $dark, $alpha: 0.0875);
+
+    color: $dark;
     .quiz-option-number {
       color: $dark;
     }

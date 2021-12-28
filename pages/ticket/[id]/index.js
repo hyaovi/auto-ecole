@@ -25,8 +25,10 @@ function Ticket() {
   }, [ticketId]);
 
   return (
-    <div className='container'>
-      {questions.length ? <Display questionList={questions} /> : <></>}
+    <div className='full-height quiz-bg-light'>
+      <div className='container'>
+        {questions.length ? <Display questionList={questions} /> : <></>}
+      </div>
     </div>
   );
 }
